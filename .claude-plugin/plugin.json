@@ -1,0 +1,13 @@
+{
+  "name": "tether",
+  "description": "Plugin for tightly scoped creation. A workspace for disciplined, anchored thinking prevents over-engineering and scope creep.",
+  "version": "1.0.0",
+  "author": {
+    "name": "cck"
+  },
+  "skills": "./skills/",
+  "agents": [
+    "./agents/code-builder.md"
+  ],
+  "commands": "./commands/"
+}
