@@ -4,31 +4,38 @@ Tether is a Claude Code plugin for disciplined, anchored, and tightly scoped dev
 
 ## Background 
 
-Before Opus 4.5, most agent and tool orchestrations were implicitly working *around* models' worst patterns: scope creep and over-engineering. Coding assistants felt like overeager Junior-savants that we had to carefully steer whenever projects and tasks became more complex than clean, simple linear data flows. 
+Before Opus 4.5, most agent and tool orchestrations were implicitly working *around* the model's worst behaviors: scope creep and over-engineering. Coding assistants felt like overeager Junior-savants that needed careful steering whenever projects became more complex than simple, clean linear flows. 
 
-This pattern was cleanly broken by Opus 4.5. If you're reading this you've likely felt the profound shift. When talking to Opus 4.5, it *gets* it. The ineffable *it*. We can safely say we are now in the shift of LLM Agents from spastic assistants to powerful, intelligent collaborators.
+This pattern was cleanly broken by Opus 4.5. If you're reading this you've likely felt the shift. When talking to Opus 4.5, it *gets* it. The ineffable *it*. We can safely say this is the change of LLM Agents from spastic assistants to powerful, intelligent collaborators.
 
 ## Core Principle: The Workspace
 
-Tether builds on this agentic paradigm shift with a Workspace that represents knowledge and action in constrained environments. Workspaces are the linked, evolving record of a project's scope, decisions, and implementations. They are built from structured markdown files with a naming convention inspired by Herbert A. Simon's List of Lists.
+Tether builds on this agentic paradigm shift with a Workspace to represent knowledge and action in constrained environments. Workspaces are the linked, evolving record of a project's scope, decisions, and implementations. They are built from structured markdown files with a naming convention inspired by Herbert A. Simon's List of Lists. And, most importantly, they persist across sessions.
 
-Each task gets a file:
+Each task becomes a file. The naming convention *is* the data structure:
 
 ```
 workspace/NNN_task-slug_status[_from-NNN].md
 ```
 
-The lineage suffix (`_from-NNN`) is how tasks reference their parents. Run `ls workspace/` to see all active work at a glance.
+| Name Part   | Purpose                       | Changes                                        |
+| ----------- | ----------------------------- | ---------------------------------------------- |
+| `NNN`       | Sequence number (001, 002...) | Grows as work progresses                       |
+| `task-slug` | Human-readable identifier     | Set at creation                                |
+| `status`    | Current state                 | `active` → `complete`, `blocked`, or `handoff` |
+| `_from-NNN` | Lineage suffix                | Links child tasks to parents                   |
 
-A workspace file contains three sections that mirror the development lifecycle:
+The filesystem becomes queryable memory. `ls workspace/` shows the active, ongoing work. `ls workspace/*_from-003*` reveals everything that emerged from task 003. Understanding compounds across sessions. When you return tomorrow, the structure is waiting and ready to go.
 
-| Section    | Purpose                                                                                       |
-| ---------- | --------------------------------------------------------------------------------------------- |
-| **Anchor** | The fixed point. Scope, exclusions, patterns to follow, path, and delta—everything you're bound to. |
+Workspace files have three sections that mirror tether's development cycle:
+
+| Section    | Purpose                                                                                                             |
+| ---------- | ------------------------------------------------------------------------------------------------------------------- |
+| **Anchor** | The fixed point. Scope, exclusions, patterns to follow, path, and delta—everything you're bound to.                 |
 | **Trace**  | The reasoning traced during build. Patterns noticed, decisions made, constraints hit—written *before* implementing. |
-| **Close**  | The proof. What was delivered, what was deliberately omitted, why.                            |
+| **Close**  | The proof. What was delivered, what was deliberately omitted, why.                                                  |
 
-## The Discipline
+## tether's Development Cycle
 
 Tether follows a four-phase development rhythm:
 
@@ -41,17 +48,17 @@ These phases are how drift becomes visible *before* it leaks and compounds.
 
 ## Drift Signals
 
-Certain phrases are reliable indicators of scope expansion.
+Certain phrases are reliable indicators of scope creep:
 
 - *"flexible," "extensible," "comprehensive"*
 - *"while we're at it," "might as well"*
 - *"in case," "future-proof"*
 
-When tether detects these phrases, it halts and clarifies before moving.
+When tether detects these phrases, it stops and anchors around the original request before moving forward.
 
-## Components
+## Architecture
 
-Tether is a coordinated system of skills, agents, and commands:
+Tether is a plugin made up of skills, agents, and commands:
 
 | Component               | Purpose                                                                    |
 | ----------------------- | -------------------------------------------------------------------------- |
@@ -62,22 +69,17 @@ Tether is a coordinated system of skills, agents, and commands:
 | `/tether:close [task]`  | Complete a task. Add omissions. Rename to final status.                    |
 | `/tether:drift`         | Review current work against its anchor for scope creep.                    |
 
-## Constraints
+## Guiding Principles
 
-These are the load-bearing walls of tethered development:
+tether bases all of its work on the following key principles:
 
-| Constraint                 | Meaning                                                 |
+| Principle                  | Description                                             |
 | -------------------------- | ------------------------------------------------------- |
 | **Edit over create**       | Modify what exists before creating something new.       |
-| **Concrete over abstract** | Build the specific solution, not the general framework. |
+| **Concrete over abstract** | Build the specific solution, not an abstract framework. |
 | **Present over future**    | Implement current requirements, not anticipated ones.   |
 | **Explicit over clever**   | Choose clarity over sophistication.                     |
 
-## Omissions
-
-Every completed task requires listing what was deliberately *not* implemented.
-
-This is not bookkeeping. It is the forcing function that makes scope visible. "Nothing omitted" means you either scoped too narrowly or exceeded scope. Adjacent work always exists—name what you chose not to do.
 
 ## When to Use Tether
 
@@ -90,7 +92,7 @@ Tether is the right tool when:
 
 ## When Not to Use Tether
 
-Tether adds overhead. That overhead compounds into value over multi-session, complex work. It is the wrong tool for:
+For all of its power, tether does add overhead. While that overhead compounds into value over multi-session, complex work, it is the wrong tool for:
 
 - Exploratory prototyping where you *want* the model to wander
 - Autonomous long-running tasks (use Ralph or similar orchestrators)
