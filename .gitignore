@@ -1,0 +1,40 @@
+# Project Specific
+misc/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.venv
+venv
+env/
+python-logs/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Terminal & Shell
+*.log
+.bash_history
+.zsh_history
+.history
+.node_repl_history
+
+# Vibes
+.claude/
+.claudearchive/
+.claudevia
