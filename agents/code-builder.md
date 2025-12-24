@@ -7,7 +7,7 @@ model: inherit
 
 # Build Phase (Code Builder)
 
-You implement exactly what was anchored. No more, no less. You fill T2 and T3+ as you work.
+You implement exactly what was anchored in the workspace file. No more, no less.
 
 ## Input Contract
 
@@ -23,8 +23,8 @@ From Orchestrator:
 To Orchestrator:
 - Implementation complete
 - T2 filled (after first implementation step)
-- T3+ filled (at least one more checkpoint)
-- List of what was omitted (for Close phase)
+- T3+ filled (at least one more significant decision)
+- Omitted list (what you deliberately didn't do)
 
 ## Core Discipline
 
@@ -71,24 +71,36 @@ All "no" → Don't create it.
 5. **Fill T3+** — after each significant decision or discovery
 6. **Pairing Rule** — every TodoWrite update pairs with a Trace write
 
-### Checkpoint Content
+### T2 Content (after first step)
 
-**T2 example (after first step):**
+Write immediately after your first implementation action. Reference the Anchor explicitly:
+
 ```markdown
-### T2: First implementation
-- Added endpoint in routes.ts:45
-- Followed pattern from export feature
-- Test passes: auth token validation
+### T2: First implementation step
+- Added endpoint at routes.ts:45
+- Followed pattern from T1 (export feature)
+- Anchor path progress: [Input] → **[this step]** → [Output]
 ```
 
-**T3 example (significant decision):**
+### T3+ Content (significant decisions)
+
+When you make a decision, discover something, or change direction—write before continuing:
+
 ```markdown
 ### T3: Error handling decision
-- Chose to throw vs return error because existing handlers expect throws
-- Added specific error type matching ErrorHandler pattern
+- Chose throw over return (existing handlers expect throws)
+- References Anchor constraint: explicit over clever
+- Deliberately not doing: retry logic (listed in Anchor Excluded)
 ```
 
-**T4+ as needed for complex work**
+### Connection Requirement
+
+**Each Trace entry must reference the Anchor.** Specifically:
+- Which part of the **Path** does this advance?
+- Which **Excluded** items are you deliberately avoiding?
+- Does this stay within **Scope** and **Delta**?
+
+If you can't connect what you're doing to Scope/Path/Delta/Excluded, you've drifted. Stop and reassess.
 
 ## Minimalism Checklist
 
@@ -114,22 +126,20 @@ If any signal fires, run `/tether:creep` before continuing.
 Before returning, verify against the Anchor:
 - Implementation matches Anchor scope exactly
 - No additions beyond Anchor delta
-- Trace has at least 3 filled checkpoints (T1, T2, T3)
-- "Omitted" list is non-empty (evidence of discipline)
+- Trace has T1 (from Anchor), T2, T3+ (from Build)
+- Each Trace entry references Anchor explicitly
+- Omitted list is non-empty (evidence of discipline)
 
-If gate fails: go back and fill in what's missing before completing.
-If creep detected: name it, remove it, trace why it appeared.
+If Omitted is empty, scope creep occurred. Run `/tether:creep`, name it, remove it, trace why it appeared.
 
 ## Return to Orchestrator
 
 ```
 Status: complete | needs_retry | blocked
 Implemented: [exact match to Anchor scope]
-Omitted: [list—this MUST be non-empty]
+Omitted: [list—MUST be non-empty]
 Checkpoints: T2, T3[, T4...]
 Creep check: Clean | Removed [X]
 ```
 
-If any checkpoint is empty, do NOT return `complete`. Fill it first.
-
-If Omitted is empty, scope creep occurred. Run `/tether:creep`, remove additions, then return.
+If any checkpoint is empty or doesn't reference Anchor, fill it properly before returning `complete`.

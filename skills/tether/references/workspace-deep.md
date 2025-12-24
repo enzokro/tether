@@ -37,9 +37,9 @@ Path: [Input] → [Processing] → [Output]
 Delta: [smallest change achieving requirement]
 
 ## Trace
-### T1: [filled at Anchor—initial understanding, patterns found, approach]
-### T2: [filled at Build—after first implementation step]
-### T3: [filled at Build—before closing]
+### T1: [Anchor fills—patterns found, approach, references Path]
+### T2: [Build fills—after first step, references Anchor]
+### T3: [Build fills—significant decision, references Anchor]
 
 ## Close
 Omitted: [things not implemented because not requested—MUST be non-empty]
@@ -51,11 +51,11 @@ Each section is produced by a phase and consumed by the next:
 
 **Anchor** (Phase 2 output): The fixed point. Scope, exclusions, patterns, path, delta. Set once, never modified.
 
-**Trace** (Phase 2-3 output): Decision traces as numbered checkpoints.
-- T1 filled at Anchor phase—initial understanding before implementation
-- T2, T3+ filled at Build phase—reasoning during implementation
-- Every TodoWrite update pairs with a Trace write
-- Empty checkpoints = missing decision trace
+**Trace** (Phase 2-3 output): Decision traces with Anchor references.
+- T1 filled at Anchor—patterns found, approach chosen, constraints identified
+- T2, T3+ filled at Build—reasoning during implementation
+- Each entry must reference Anchor explicitly (Path/Scope/Delta/Excluded)
+- Pairing rule: every TodoWrite update pairs with a Trace write
 
 **Close** (Phase 4 output): The proof. What was delivered, what was omitted, how the Anchor was satisfied.
 
@@ -134,22 +134,25 @@ No special tooling. The filesystem is the query engine.
 
 ## TodoWrite Integration
 
-**The Pairing Rule**: Every TodoWrite update pairs with a Trace write. They move together.
+**The Pairing Rule**: Every TodoWrite update pairs with a Trace write.
 
-| System | Tracks | Lifecycle | Phase |
-|--------|--------|-----------|-------|
-| TodoWrite | What you're doing | Items complete and disappear | Build |
-| Trace | What you're thinking | Checkpoints persist and compound | Anchor + Build |
+| System | Tracks | Lifecycle | Cadence |
+|--------|--------|-----------|---------|
+| TodoWrite | What you're doing | Items complete and disappear | Update per task |
+| Trace | Why you're doing it | Persists and compounds | Every TodoWrite update |
 
 - TodoWrite: execution items (what to do next)
-- Trace: decision traces (T1 at Anchor, T2+ at Build)
+- Trace: decision traces (why, referencing Anchor)
 
-**The structural guarantee**: You will update TodoWrite—that's your locked-in pattern. The pairing rule rides that pattern. When you update TodoWrite, also write to Trace.
+**Connection Requirement**: Each Trace entry must reference the Anchor explicitly:
+- Which part of **Path** does this advance?
+- Which **Excluded** items are you deliberately avoiding?
+- Does this stay within **Scope** and **Delta**?
 
-**Contract enforcement**:
-- T1 must be filled before Build phase starts (Anchor's output)
-- T2, T3 must be filled before Close phase starts (Build's output)
-- Empty checkpoints block the next phase
+**Contract enforcement** (by orchestrator):
+- T1 verified before Build (Anchor's output)
+- T2, T3 verified before Close (Build's output)
+- Orchestrator checks existence; connection to Anchor is on you
 
 ---
 

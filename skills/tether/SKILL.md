@@ -107,9 +107,9 @@ Path: [Input] → [Processing] → [Output]
 Delta: [smallest change achieving requirement]
 
 ## Trace
-### T1: [filled at Anchor—initial understanding, patterns found, approach]
-### T2: [filled at Build—after first implementation step]
-### T3: [filled at Build—before closing]
+### T1: [Anchor fills—patterns found, approach, references Path]
+### T2: [Build fills—after first step, references Anchor]
+### T3: [Build fills—significant decision, references Anchor]
 
 ## Close
 Omitted: [added at Close]
@@ -124,25 +124,30 @@ Complete: [added at Close]
 **Input**: Workspace file with Anchor section + T1 filled
 **Output**: T2, T3+ checkpoints filled; implementation complete
 
-Do the work. Think ON the workspace file, not in your head.
+Do the work. Write to Trace during implementation, not after.
 
-**The Pairing Rule**: Every TodoWrite update pairs with a Trace write. You will update TodoWrite—that's your locked-in pattern. Use it. When you update TodoWrite, also write to Trace. They move together.
+**Execution Protocol**:
+1. Read workspace file—verify T1 has substantive content
+2. Confirm Anchor's path is still correct
+3. Execute in smallest possible increments
+4. **Fill T2 immediately**—after first implementation step
+5. **Fill T3+**—after each significant decision or discovery
+6. **Pairing Rule**—every TodoWrite update pairs with a Trace write
 
-**Checkpoints during Build**:
-- **T2**: After first implementation step completes
-- **T3+**: Add more as needed—after each significant decision or discovery
-
-If a checkpoint is empty when you move past it, stop. Fill it in. The structure makes staleness visible.
+**Connection Requirement**: Each Trace entry must reference the Anchor explicitly:
+- Which part of **Path** does this advance?
+- Which **Excluded** items are you deliberately avoiding?
+- Does this stay within **Scope** and **Delta**?
 
 | Moment | Action |
 |--------|--------|
+| First step done | Write T2 → reference Anchor path |
+| Made a decision | Write T3+ → reference Anchor constraints |
 | Update TodoWrite | Also write to Trace (pairing rule) |
-| Notice how something works | Write to Trace → continue |
-| Choose between options | Write to Trace → implement |
-| Hit a wall or requirement | Write to Trace → work around |
-| Sense complexity growing | Run `/tether:creep` → check against Anchor |
+| Can't connect to Anchor | Stop → you've drifted, reassess |
+| Complexity growing | Run `/tether:creep` → check against Anchor |
 
-**Rule**: Trace first, implement second. Every entry connects to Anchor.
+If you can't connect what you're doing to Scope/Path/Delta/Excluded, you've drifted. Stop and reassess.
 
 **Creep signals** (stop and check):
 - "flexible," "extensible," "comprehensive"
@@ -227,7 +232,9 @@ workspace/005_integration_active_from-002-003.md
 - Build → Close: T2, T3 must have substantive content
 - Close gate: Omitted must be non-empty
 
-**Pairing Rule** (during Build): Every TodoWrite update pairs with a Trace write.
+**Pairing Rule**: Every TodoWrite update pairs with a Trace write.
+
+**Connection Requirement**: Each Trace entry must reference Anchor (Path/Scope/Delta/Excluded).
 
 **Constraints**: Edit > create | Concrete > abstract | Present > future | Explicit > clever
 
