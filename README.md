@@ -4,11 +4,11 @@ Tether is a Claude Code plugin for disciplined and scoped development. It seizes
 
 ## Background
 
-Before Opus 4.5, most agent and tool orchestrations were implicitly working *around* the model's worst tendencies: scope creep and over-engineering. Coding assistants felt like overeager Junior-savants that had to be carefully steered whenever projects became more than simple, clean data flows.
+Before Opus 4.5, the major parts of agent scaffolds and orchestrators were dedicated to working *around* the model's worst tendencies: scope creep and over-engineering. Coding assistants felt like overeager Junior-savants that had to be carefully steered whenever projects became more than simple, clean data flows.
 
 Opus 4.5 broke this pattern. If you're reading this then you've likely felt the shift. Talking to Opus 4.5, it *gets* it. The ineffable *it*. We can safely say this is the change in LLM Agents from spastic assistants to powerful, intelligent collaborators.
 
-We can fully leverage the combination of models being much more capable and understanding us better to create a truly excellent development loop. Tether builds on this shift using an orchestrator that coordinates sub-agents with structural constraints: tiered phases, verified callbacks, and externalized thinking traces that gather over sessions.
+`tether` leverages this combination of models being more capable *and* understanding us better to create a truly powerful development loop. It deploys an orchestrator that guides sub-agents along structural constraints: tiered phases, verified callbacks, and externalized thinking traces that gather over sessions. And all of this fully leveraging the capabilities of Opus 4.5, no more cautious model hand-holding.
 
 ## Philosophy
 
@@ -24,7 +24,7 @@ Tether is based on the following key principles:
 
 ## The Development Cycle
 
-Tether follows a four-phase development cycle. Each phase is a separate agent with bounded context. The orchestrator verifies that artifacts exist before spawning the next phase. This is *structural enforcement*, not self-discipline.
+The orchestrator follows a four-phase development cycle. Each phase is carried out by a separate agent with bounded context. The orchestrator verifies that artifacts exist before spawning the next phase.
 
 ```
 [Assess] → route → [Anchor] → file+T1 → [Build] → T2,T3+ → [Close]
