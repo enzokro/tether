@@ -8,23 +8,23 @@ Before Opus 4.5, the major parts of agent scaffolds and orchestrators were dedic
 
 Opus 4.5 broke this pattern. If you're reading this then you've likely felt the shift. Talking to Opus 4.5, it *gets* it. The ineffable *it*. We can safely say this is the change in LLM Agents from spastic assistants to powerful, intelligent collaborators.
 
-`tether` leverages these increased model capabilities *and* their better understanding of our needs to create a powerful development harness. It deploys an orchestrator that guides sub-agents along structural constraints: tiered phases with externalized thinking traces that gather over sessions. And all of this while fully leveraging the capabilities of Opus 4.5; no more cautious model handholding.
+`tether` leverages these increased model capabilities *and* their better understanding of our needs to create a powerful development harness. It deploys an orchestrator that guides sub-agents along structural constraints, with tiered phases and externalized thinking traces that gather over sessions. And all of this fully anchored on Opus 4.5; no more cautious model handholding.
 
 ## Philosophy
 
-`tether` is based on the following key principles:
+`tether` is based on four principles that keep LLM Agents focused on the task at hand:
 
-| Principle                  | Description                                             |
-| -------------------------- | ------------------------------------------------------- |
-| **Edit over create**       | Modify what exists before creating something new.       |
-| **Concrete over abstract** | Build the specific solution, not an abstract framework. |
-| **Present over future**    | Implement current requirements, not anticipated ones.   |
-| **Explicit over clever**   | Choose clarity over sophistication.                     |
+| Principle                  | Description                                               |
+| -------------------------- | --------------------------------------------------------- |
+| **Present over future**    | Implement current requests, not anticipated future needs. |
+| **Concrete over abstract** | Build a specific solution, not abstract frameworks.       |
+| **Explicit over clever**   | Always choose clarity over sophistication.                |
+| **Edit over create**       | Modify what exists before creating something new.         |
 
 
 ## The Development Cycle
 
-The orchestrator follows a development cycle with four phases. Each phase is carried out by a separate agent with bounded context. The orchestrator verifies that artifacts exist before spawning the next phase.
+The `tether` orchestrator follows a development cycle with four phases. Each phase is carried out by an agent with bounded context. The orchestrator verifies that the correct artifacts exist before spawning the next phase.
 
 ```
 [Assess] → route → [Anchor] → file+T1 → [Build] → T2,T3+ → [Close]
