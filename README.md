@@ -21,7 +21,7 @@ Opus 4.5 broke this pattern. If you're reading this then you've likely felt the 
 | **Explicit over clever**   | Always choose clarity over sophistication.                |
 | **Edit over create**       | Modify what exists before creating something new.         |
 
-None of these are new. In fact they read as the obvious 101s of software development. But anyone who's spent time building apps with LLMs knows that the models are ambitious and like to stay busy. They often deviate from these principles and tech debt quickly accumulates, especially in complex projects. `tether` gives Claude Code a framework that makes these principles its north star. 
+None of these are new. In fact they read as the obvious 101s of software development. But anyone who's spent time building apps with LLMs knows that the models are ambitious and like to stay busy. They often deviate from these principles and tech debt quickly accumulates, especially in complex projects. `tether` gives Claude Code a framework that turns these principles into its north star. 
 
 # Installation
 
@@ -31,6 +31,7 @@ claude /plugin install <your-marketplace>/tether
 ```
 
 Make sure to update the marketplace.json file to include the plugin.
+> TODO: add plugin to marketplace proper
 
 
 # Architecture
