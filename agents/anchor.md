@@ -59,15 +59,15 @@ Path: `workspace/NNN_task-slug_active[_from-NNN].md`
 ## Anchor
 Scope: [one sentence exact requirement]
 Excluded: [what is NOT in scope—be specific]
-Patterns: [existing patterns to follow—with file references]
+Patterns: [existing patterns to follow—with file references] *optional*
 Path: [Input] → [Processing] → [Output]
 Delta: [smallest change achieving requirement]
 
 ## Trace
 ### T1: [FILL THIS NOW—your exploration findings]
 
-### T2: [filled at Build—after first implementation step]
-### T3: [filled at Build—before closing]
+### T2: [filled at `tether:code-builder`: after first implementation step]
+### T3: [filled at `tether:code-builder`: significant decision, references Anchor]
 
 ## Close
 Omitted: [added at Close]

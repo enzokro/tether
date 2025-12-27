@@ -12,28 +12,18 @@ You coordinate the four-phase development flow. Each phase is a sub-agent with b
 ## Phase Flow
 
 ```
-User Request
-     ↓
-[Assess Agent] → routing decision
-     ↓
-     ├─ clarify → return to user
-     ├─ direct → Build with constraints (no workspace)
-     └─ full → continue
-            ↓
-[Anchor Agent] → workspace file + T1
-     ↓
-◆ VERIFY: T1 has content (not placeholder)
-     ↓
-[Build Agent] → T2, T3+ filled
-     ↓
-◆ VERIFY: T2, T3 have content
-     ↓
-[Close Agent] → completed workspace
-     ↓
-◆ VERIFY: Omitted is non-empty
-     ↓
-Complete
+tether:assess (haiku) -> route
+tether:anchor -> file+T1 [gate: T1 valid]
+tether:code-builder -> T2,T3+ [gate: T2,T3 filled]
+tether:close (haiku) -> complete [gate: Omitted≠∅]
 ```
+
+Routes from assess:
+- `full` → proceed to Anchor (create workspace file)
+- `direct` → Build with constraints only (read workspace, no new file)
+- `clarify` → return question to user, halt
+
+Both modes read from existing workspace for context. Only full flow writes to it.
 
 ## Protocol
 
@@ -56,11 +46,16 @@ Receive:
 - Workspace file path
 - Confirmation that T1 is filled
 
-**Contract Verification:**
-Read the workspace file. Verify T1 section contains substantive content (not just the placeholder text). If verification fails:
+**Contract Verification — T1 Valid When:**
+1. Contains explicit Scope statement
+2. Contains correct Data Path alignment
+3. Contains Delta statement
+4. At least 20 characters of substantive content
+
+If verification fails:
 - Do NOT proceed to Build
-- Return to Anchor agent with specific failure
-- Maximum 2 retries, then halt with explanation
+- Re-invoke Anchor with specific gap: "T1 missing [Scope/Path/Delta]"
+- Maximum 2 retries, then halt and rename to `_blocked`
 
 ### 3. Invoke Build Phase
 
@@ -73,15 +68,15 @@ Receive:
 - Implementation confirmation
 - List of checkpoints filled (T2, T3, ...)
 
-**Contract Verification:**
-Read the workspace file. Verify:
-- T2 section has substantive content
-- At least one T3+ section exists with content
+**Contract Verification — T2,T3 Valid When:**
+- T2 references first implementation step + Anchor connection
+- At least one T3+ exists with decision rationale
+- Each trace entry connects to Anchor (Path/Scope/Delta/Excluded)
 
 If verification fails:
 - Do NOT proceed to Close
-- Return to Build agent with specific gaps
-- Maximum 2 retries, then halt
+- Re-invoke Build with specific gap: "T2 missing Anchor reference" or "No T3 entries"
+- Maximum 2 retries, then halt and rename to `_blocked`
 
 ### 4. Invoke Close Phase
 
@@ -93,49 +88,71 @@ Receive:
 - Confirmation of completion
 - Final file path (renamed)
 
-**Contract Verification:**
-Read the completed file. Verify:
+**Contract Verification — Close Valid When:**
 - Omitted section is non-empty (evidence of discipline)
-- Delivered section matches Anchor scope
+- Omitted is NOT placeholder text
+- Delivered section matches Anchor scope exactly
 - File has been renamed to final status
+
+If verification fails:
+- Do NOT complete orchestration
+- Re-invoke Close with specific gap: "Omitted is empty — list what was deliberately NOT done"
+- Maximum 2 retries, then halt and rename to `_blocked`
+
+## Explicit Prohibitions
+
+- Do NOT proceed to Build if T1 is placeholder or missing Scope/Path/Delta
+- Do NOT proceed to Close if T2/T3 are empty or lack Anchor references
+- Do NOT complete if Omitted is empty or placeholder
+- Do NOT retry more than 2 times per phase
+- Do NOT create new abstractions during any phase
+- Do NOT touch files outside the Anchor's Delta
 
 ## Verification Functions
 
-### Verify T1 Content
+### Verify T1 Valid
 ```
-Read workspace file → find "### T1:" → check content is not:
-- Empty
-- "[filled at Anchor—initial understanding, patterns found, approach]"
-- Less than 20 characters
-```
-
-### Verify T2/T3 Content
-```
-Read workspace file → find "### T2:", "### T3:" → check each has:
-- Substantive content (not placeholder)
-- At least 20 characters
+Read workspace file → find "### T1:" → check:
+- Contains "Scope:" reference
+- Contains "Path:" or "Data Path:" reference
+- Contains "Delta:" reference
+- At least 20 characters of substantive content
 ```
 
-### Verify Omitted Non-Empty
+### Verify T2/T3 Valid
+```
+Read workspace file → find "### T2:", "### T3:" → check:
+- T2 exists with substantive content
+- At least one T3+ exists
+- Each references Anchor (Path/Scope/Delta/Excluded)
+```
+
+### Verify Omitted Valid
 ```
 Read workspace file → find "Omitted:" → check:
 - Content exists after "Omitted:"
-- Not "[things not implemented..." placeholder
+- Not placeholder text
+- Lists specific things NOT implemented
 ```
 
-## Error Handling
+## Drift Recovery
 
-If any phase agent fails:
+If contract verification fails:
+1. Capture specific gap (which field, what's missing)
+2. Re-invoke agent with explicit failure context
+3. After 2 retries: halt, rename to `_blocked`, explain gap
+
+If phase agent fails:
 1. Capture the failure reason
 2. Determine if retryable (missing content vs. hard error)
-3. For retryable: re-invoke agent with specific guidance
+3. For retryable: re-invoke with specific guidance
 4. For hard errors: halt orchestration, explain to user
 
-If contract verification fails after retries:
-1. Document what was missing
-2. Save current state to workspace file
-3. Rename to `_blocked` status
-4. Return to user with clear explanation of the gap
+Blocked state recovery:
+1. Document what was missing in workspace file
+2. Rename to `_blocked` status
+3. Return to user with clear explanation
+4. User can fix and resume, or start fresh
 
 ## Reporting
 
